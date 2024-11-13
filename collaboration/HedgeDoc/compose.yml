@@ -1,0 +1,24 @@
+services:
+  hedgedoc:
+    image: quay.io/hedgedoc/hedgedoc:latest
+    container_name: hedgedoc
+    ports:
+      - "80:3000"
+    environment:
+      - CMD_DB_URL=postgres://hedgedoc:password@db:5432/hedgedoc
+      - CMD_URL=https://localhost:80
+      - CMD_DOMAIN=localhost
+      - CMD_PROTOCOL_USESSL=false
+    depends_on:
+      - db
+  db:
+    image: postgres:17
+    container_name: hedgedoc-db
+    environment:
+      - POSTGRES_USER=hedgedoc
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=hedgedoc
+    volumes:
+      - hedgedoc-db-data:/var/lib/postgresql/data
+volumes:
+  hedgedoc-db-data:
